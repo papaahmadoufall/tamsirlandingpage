@@ -154,8 +154,9 @@ window.addEventListener('DOMContentLoaded', () => {
   let dragStartY = null;
   let dragging = false;
   let dragDirection = null; // 'up' ou 'down'
-  let dragThreshold = window.innerHeight * 0.4;
+  let dragThreshold = window.innerHeight * 0.2;
   let dragActive = false;
+  let dragStartedOnButton = false;
 
   function setPresentationY(y) {
     gsap.set(presentationSection, {y: y});
@@ -163,10 +164,11 @@ window.addEventListener('DOMContentLoaded', () => {
     if (lines) gsap.set(lines, {y: y});
   }
 
-  function animatePresentationTo(y, cb) {
-    gsap.to(presentationSection, {y: y, duration: 0.3, ease: 'power2.out', onComplete: cb});
+  function animatePresentationTo(y, cb, fast = false) {
+    const duration = fast ? 0.15 : 0.3;
+    gsap.to(presentationSection, {y: y, duration, ease: 'power2.out', onComplete: cb});
     const lines = document.getElementById('presentation-lines');
-    if (lines) gsap.to(lines, {y: y, duration: 0.3, ease: 'power2.out'});
+    if (lines) gsap.to(lines, {y: y, duration, ease: 'power2.out'});
   }
 
   function enableParallaxReveal() {
@@ -176,8 +178,10 @@ window.addEventListener('DOMContentLoaded', () => {
       const explanationBtn = document.getElementById('explanation-btn');
       const closeBtn = document.getElementById('close-presentation');
       if ((explanationBtn && explanationBtn.contains(e.target)) || (closeBtn && closeBtn.contains(e.target))) {
+        dragStartedOnButton = true;
         return;
       }
+      dragStartedOnButton = false;
       // Si la description est cachée, drag up pour ouvrir
       if (!isPresentationVisible) {
         dragStartY = e.touches[0].clientY;
@@ -200,7 +204,7 @@ window.addEventListener('DOMContentLoaded', () => {
     }, {passive: false});
 
     document.addEventListener('touchmove', (e) => {
-      if (!dragging || e.touches.length !== 1) return;
+      if (!dragging || dragStartedOnButton || e.touches.length !== 1) return;
       const currentY = e.touches[0].clientY;
       let deltaY = currentY - dragStartY;
       if (dragDirection === 'up' && deltaY < 0) {
@@ -214,7 +218,10 @@ window.addEventListener('DOMContentLoaded', () => {
     }, {passive: false});
 
     document.addEventListener('touchend', (e) => {
-      if (!dragging) return;
+      if (!dragging || dragStartedOnButton) {
+        dragStartedOnButton = false;
+        return;
+      }
       const endY = e.changedTouches[0].clientY;
       let deltaY = endY - dragStartY;
       if (dragDirection === 'up') {
@@ -229,7 +236,7 @@ window.addEventListener('DOMContentLoaded', () => {
               {opacity: 0, y: 40},
               {opacity: 1, y: 0, stagger: 0.25, duration: 1, ease: 'power2.out'}
             );
-          });
+          }, false);
         } else {
           // Annule
           animatePresentationTo(window.innerHeight, () => {
@@ -237,7 +244,7 @@ window.addEventListener('DOMContentLoaded', () => {
             presentationSection.style.opacity = 0;
             const lines = document.getElementById('presentation-lines');
             if (lines) gsap.set(lines, {y: 0});
-          });
+          }, true);
         }
       } else if (dragDirection === 'down') {
         if (deltaY > dragThreshold) {
@@ -255,7 +262,7 @@ window.addEventListener('DOMContentLoaded', () => {
                 isPresentationVisible = false;
                 const lines = document.getElementById('presentation-lines');
                 if (lines) gsap.set(lines, {y: 0});
-              });
+              }, true);
             }
           });
         } else {
@@ -263,13 +270,14 @@ window.addEventListener('DOMContentLoaded', () => {
           animatePresentationTo(0, () => {
             const lines = document.getElementById('presentation-lines');
             if (lines) gsap.set(lines, {y: 0});
-          });
+          }, true);
         }
       }
       dragging = false;
       dragActive = false;
       dragStartY = null;
       dragDirection = null;
+      dragStartedOnButton = false;
     }, {passive: false});
   }
 
