@@ -38,6 +38,33 @@ setInterval(() => {
 window.addEventListener('DOMContentLoaded', () => {
   gsap.registerPlugin(ScrollTrigger);
 
+  // Scroll synchronisé sur la description
+  const isMobile = window.innerWidth < 768;
+  const lines = document.querySelectorAll('#presentation-lines > div');
+  if (lines.length) {
+    lines.forEach((line, i) => {
+      gsap.fromTo(line,
+        { y: isMobile ? 120 : 60, opacity: 0 },
+        {
+          y: 0,
+          opacity: 1,
+          scrollTrigger: {
+            trigger: '#presentation-lines',
+            start: 'top center',
+            end: 'bottom center',
+            scrub: isMobile ? 1.5 : 0.7,
+            onLeave: () => {
+              // Effet bounce à la fin du scroll
+              gsap.to(line, { y: -20, duration: 0.25, ease: 'bounce.out', yoyo: true, repeat: 1 });
+            }
+          },
+          ease: 'power1.out',
+          duration: 1.2
+        }
+      );
+    });
+  }
+
   const presentationSection = document.getElementById('presentation');
   const explanationBtn = document.getElementById('explanation-btn');
   let isPresentationVisible = false;

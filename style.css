@@ -51,6 +51,14 @@ body {
   font-weight: 500;
 }
 
+html, body {
+  height: 100vh;
+  overflow: hidden;
+}
+#presentation {
+  height: 100vh;
+}
+
 @keyframes fadeSlideIn {
   to {
     opacity: 1;
