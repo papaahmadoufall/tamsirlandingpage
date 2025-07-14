@@ -105,50 +105,27 @@ window.addEventListener('DOMContentLoaded', () => {
     lastScrollY = window.scrollY;
   }, {passive: true});
 
-  // Touch events pour mobile (swipe up/down)
-  // Ajout debug swipe mobile
+  // Touch events pour mobile (swipe up/down) - version robuste
   let touchStartY = null;
   document.addEventListener('touchstart', (e) => {
     if (e.touches.length === 1) {
       touchStartY = e.touches[0].clientY;
-      alert('touchstart: ' + touchStartY);
     }
-  }, {passive: true});
+  });
   document.addEventListener('touchend', (e) => {
     if (touchStartY === null) return;
     const touchEndY = e.changedTouches[0].clientY;
-    const deltaY = touchStartY - touchEndY;
-    alert('touchend: ' + touchEndY + ' deltaY: ' + deltaY);
-    if (deltaY > 30) {
+    if (touchStartY - touchEndY > 20) {
       // swipe up (ouvrir la description)
+      console.log('Swipe up detected');
       showPresentation();
-    } else if (deltaY < -30) {
+    } else if (touchEndY - touchStartY > 20) {
       // swipe down (fermer la description)
+      console.log('Swipe down detected');
       hidePresentation();
     }
     touchStartY = null;
-  }, {passive: true});
-
-  // Test swipe mobile fiable : affiche une alerte selon le sens du swipe (uniquement si le mouvement est vertical et significatif)
-  let swipeTestStartY = null;
-  document.addEventListener('touchstart', (e) => {
-    if (e.touches.length === 1) {
-      swipeTestStartY = e.touches[0].clientY;
-    }
-  }, {passive: true});
-  document.addEventListener('touchend', (e) => {
-    if (swipeTestStartY === null) return;
-    const swipeTestEndY = e.changedTouches[0].clientY;
-    const deltaY = swipeTestStartY - swipeTestEndY;
-    if (Math.abs(deltaY) > 30) {
-      if (deltaY > 0) {
-        alert('Scroll up detected!');
-      } else {
-        alert('Scroll down detected!');
-      }
-    }
-    swipeTestStartY = null;
-  }, {passive: true});
+  });
 
   // Fermer la description en cliquant en dehors du texte ou du bouton close
   if (presentationSection) {
