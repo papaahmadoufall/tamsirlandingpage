@@ -53,7 +53,7 @@ window.addEventListener('DOMContentLoaded', () => {
     if (isPresentationVisible) return;
     isPresentationVisible = true;
     presentationSection.classList.remove('hidden');
-    gsap.to(presentationSection, {opacity: 1, duration: 0.5, ease: 'power2.out'});
+    gsap.to(presentationSection, {opacity: 1, duration: 0.2, ease: 'power2.out'});
     gsap.fromTo(
       '#presentation-lines > div',
       {opacity: 0, y: 40},
@@ -73,7 +73,7 @@ window.addEventListener('DOMContentLoaded', () => {
       onComplete: () => {
         gsap.to(presentationSection, {
           opacity: 0,
-          duration: 0.1, // fade-out plus rapide
+          duration: 0.2, // fade-out encore plus rapide
           ease: 'power2.in',
           onComplete: () => {
             presentationSection.classList.add('hidden');
