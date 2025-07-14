@@ -129,23 +129,25 @@ window.addEventListener('DOMContentLoaded', () => {
     touchStartY = null;
   }, {passive: true});
 
-  // Test swipe mobile : affiche une alerte selon le sens du swipe
-  let testTouchStartY = null;
+  // Test swipe mobile fiable : affiche une alerte selon le sens du swipe (uniquement si le mouvement est vertical et significatif)
+  let swipeTestStartY = null;
   document.addEventListener('touchstart', (e) => {
     if (e.touches.length === 1) {
-      testTouchStartY = e.touches[0].clientY;
+      swipeTestStartY = e.touches[0].clientY;
     }
   }, {passive: true});
   document.addEventListener('touchend', (e) => {
-    if (testTouchStartY === null) return;
-    const testTouchEndY = e.changedTouches[0].clientY;
-    const testDeltaY = testTouchStartY - testTouchEndY;
-    if (testDeltaY > 30) {
-      alert('Swipe up detected!');
-    } else if (testDeltaY < -30) {
-      alert('Swipe down detected!');
+    if (swipeTestStartY === null) return;
+    const swipeTestEndY = e.changedTouches[0].clientY;
+    const deltaY = swipeTestStartY - swipeTestEndY;
+    if (Math.abs(deltaY) > 30) {
+      if (deltaY > 0) {
+        alert('Scroll up detected!');
+      } else {
+        alert('Scroll down detected!');
+      }
     }
-    testTouchStartY = null;
+    swipeTestStartY = null;
   }, {passive: true});
 
   // Fermer la description en cliquant en dehors du texte ou du bouton close
