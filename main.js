@@ -159,15 +159,25 @@ window.addEventListener('DOMContentLoaded', () => {
 
   function setPresentationY(y) {
     gsap.set(presentationSection, {y: y});
+    const lines = document.getElementById('presentation-lines');
+    if (lines) gsap.set(lines, {y: y});
   }
 
   function animatePresentationTo(y, cb) {
     gsap.to(presentationSection, {y: y, duration: 0.3, ease: 'power2.out', onComplete: cb});
+    const lines = document.getElementById('presentation-lines');
+    if (lines) gsap.to(lines, {y: y, duration: 0.3, ease: 'power2.out'});
   }
 
   function enableParallaxReveal() {
     document.addEventListener('touchstart', (e) => {
       if (e.touches.length !== 1) return;
+      // Désactiver le drag si on touche un bouton (explanation ou close)
+      const explanationBtn = document.getElementById('explanation-btn');
+      const closeBtn = document.getElementById('close-presentation');
+      if ((explanationBtn && explanationBtn.contains(e.target)) || (closeBtn && closeBtn.contains(e.target))) {
+        return;
+      }
       // Si la description est cachée, drag up pour ouvrir
       if (!isPresentationVisible) {
         dragStartY = e.touches[0].clientY;
@@ -212,6 +222,8 @@ window.addEventListener('DOMContentLoaded', () => {
           // Ouvre complètement
           animatePresentationTo(0, () => {
             isPresentationVisible = true;
+            const lines = document.getElementById('presentation-lines');
+            if (lines) gsap.set(lines, {y: 0});
             gsap.fromTo(
               '#presentation-lines > div',
               {opacity: 0, y: 40},
@@ -223,6 +235,8 @@ window.addEventListener('DOMContentLoaded', () => {
           animatePresentationTo(window.innerHeight, () => {
             presentationSection.classList.add('hidden');
             presentationSection.style.opacity = 0;
+            const lines = document.getElementById('presentation-lines');
+            if (lines) gsap.set(lines, {y: 0});
           });
         }
       } else if (dragDirection === 'down') {
@@ -239,12 +253,17 @@ window.addEventListener('DOMContentLoaded', () => {
                 presentationSection.classList.add('hidden');
                 presentationSection.style.opacity = 0;
                 isPresentationVisible = false;
+                const lines = document.getElementById('presentation-lines');
+                if (lines) gsap.set(lines, {y: 0});
               });
             }
           });
         } else {
           // Annule
-          animatePresentationTo(0);
+          animatePresentationTo(0, () => {
+            const lines = document.getElementById('presentation-lines');
+            if (lines) gsap.set(lines, {y: 0});
+          });
         }
       }
       dragging = false;
