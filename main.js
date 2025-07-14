@@ -149,6 +149,115 @@ window.addEventListener('DOMContentLoaded', () => {
       showPresentation();
     });
   }
+
+  // Parallax drag-to-reveal sur mobile
+  let dragStartY = null;
+  let dragging = false;
+  let dragDirection = null; // 'up' ou 'down'
+  let dragThreshold = window.innerHeight * 0.4;
+  let dragActive = false;
+
+  function setPresentationY(y) {
+    gsap.set(presentationSection, {y: y});
+  }
+
+  function animatePresentationTo(y, cb) {
+    gsap.to(presentationSection, {y: y, duration: 0.3, ease: 'power2.out', onComplete: cb});
+  }
+
+  function enableParallaxReveal() {
+    document.addEventListener('touchstart', (e) => {
+      if (e.touches.length !== 1) return;
+      // Si la description est cachée, drag up pour ouvrir
+      if (!isPresentationVisible) {
+        dragStartY = e.touches[0].clientY;
+        dragging = true;
+        dragDirection = 'up';
+        setPresentationY(window.innerHeight);
+        presentationSection.classList.remove('hidden');
+        presentationSection.style.opacity = 1;
+        dragActive = true;
+        e.preventDefault();
+      } else {
+        // Si la description est visible, drag down pour fermer
+        dragStartY = e.touches[0].clientY;
+        dragging = true;
+        dragDirection = 'down';
+        setPresentationY(0);
+        dragActive = true;
+        e.preventDefault();
+      }
+    }, {passive: false});
+
+    document.addEventListener('touchmove', (e) => {
+      if (!dragging || e.touches.length !== 1) return;
+      const currentY = e.touches[0].clientY;
+      let deltaY = currentY - dragStartY;
+      if (dragDirection === 'up' && deltaY < 0) {
+        // Drag up pour reveal
+        setPresentationY(Math.max(window.innerHeight + deltaY, 0));
+      } else if (dragDirection === 'down' && deltaY > 0) {
+        // Drag down pour hide
+        setPresentationY(Math.min(deltaY, window.innerHeight));
+      }
+      e.preventDefault();
+    }, {passive: false});
+
+    document.addEventListener('touchend', (e) => {
+      if (!dragging) return;
+      const endY = e.changedTouches[0].clientY;
+      let deltaY = endY - dragStartY;
+      if (dragDirection === 'up') {
+        if (Math.abs(deltaY) > dragThreshold) {
+          // Ouvre complètement
+          animatePresentationTo(0, () => {
+            isPresentationVisible = true;
+            gsap.fromTo(
+              '#presentation-lines > div',
+              {opacity: 0, y: 40},
+              {opacity: 1, y: 0, stagger: 0.25, duration: 1, ease: 'power2.out'}
+            );
+          });
+        } else {
+          // Annule
+          animatePresentationTo(window.innerHeight, () => {
+            presentationSection.classList.add('hidden');
+            presentationSection.style.opacity = 0;
+          });
+        }
+      } else if (dragDirection === 'down') {
+        if (deltaY > dragThreshold) {
+          // Ferme complètement
+          gsap.to('#presentation-lines > div', {
+            opacity: 0,
+            y: 40,
+            stagger: 0.15,
+            duration: 1,
+            ease: 'power2.in',
+            onComplete: () => {
+              animatePresentationTo(window.innerHeight, () => {
+                presentationSection.classList.add('hidden');
+                presentationSection.style.opacity = 0;
+                isPresentationVisible = false;
+              });
+            }
+          });
+        } else {
+          // Annule
+          animatePresentationTo(0);
+        }
+      }
+      dragging = false;
+      dragActive = false;
+      dragStartY = null;
+      dragDirection = null;
+    }, {passive: false});
+  }
+
+  // Active le parallax drag sur mobile uniquement
+  if (window.matchMedia('(pointer: coarse)').matches) {
+    enableParallaxReveal();
+  }
 });
 
 // Curseur custom sur le bouton (inutile ici, mais conservé si besoin d'autres interactions)
