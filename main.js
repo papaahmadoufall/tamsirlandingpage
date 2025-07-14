@@ -105,7 +105,7 @@ window.addEventListener('DOMContentLoaded', () => {
     lastScrollY = window.scrollY;
   }, {passive: true});
 
-  // Touch events pour mobile (swipe down/up)
+  // Touch events pour mobile (swipe up/down)
   let touchStartY = null;
   window.addEventListener('touchstart', (e) => {
     if (e.touches.length === 1) {
@@ -115,11 +115,11 @@ window.addEventListener('DOMContentLoaded', () => {
   window.addEventListener('touchend', (e) => {
     if (touchStartY === null) return;
     const touchEndY = e.changedTouches[0].clientY;
-    if (touchEndY - touchStartY > 40) {
-      // swipe down
+    if (touchStartY - touchEndY > 40) {
+      // swipe up (ouvrir la description)
       showPresentation();
-    } else if (touchStartY - touchEndY > 40) {
-      // swipe up
+    } else if (touchEndY - touchStartY > 40) {
+      // swipe down (fermer la description)
       hidePresentation();
     }
     touchStartY = null;
