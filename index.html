@@ -11,13 +11,13 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='28' fill='black'/%3E%3C/svg%3E">
 </head>
-<body class="bg-white text-gray-900 font-serif" style="font-family: 'LF-Serif', Times, serif;">
-  <!-- Section Intro -->
-  <section id="intro" class="min-h-screen w-full relative overflow-hidden">
-    <!-- Logo positionné à 15% du viewport -->
-    <div class="w-full flex flex-col items-center" style="position:absolute;top:15vh;left:0;right:0;z-index:10;">
-      <span class="block mx-auto mb-4 logo-intro select-none w-[56px] md:w-[90px] lg:w-[120px]">
-        <svg width="765" height="427" viewBox="0 0 765 427" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-full h-auto">
+<body class="bg-white text-gray-900 font-serif overflow-hidden" style="font-family: 'LF-Serif', Times, serif; height: 100vh;">
+  <main id="main-scroll" class="relative w-full h-screen overflow-hidden">
+    <!-- Wrapper Tamcreativ -->
+    <div id="tamcreativ-wrapper" class="absolute inset-0 flex flex-col justify-between items-center pointer-events-none">
+      <div class="w-full flex flex-col items-center" style="position:absolute;top:15vh;left:0;right:0;z-index:10;">
+        <span class="block mx-auto mb-4 logo-intro select-none w-[56px] md:w-[90px] lg:w-[120px]">
+          <svg width="765" height="427" viewBox="0 0 765 427" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-full h-auto">
 <path d="M19.9999 1.53413C-3.20013 7.26746 -7.20013 33.0008 13.7332 43.2675C19.5999 46.2008 21.7332 46.3341 48.5332 46.7341C64.2665 46.8675 77.3332 47.1341 77.4665 47.4008C77.5999 47.5341 77.9999 95.4008 78.2665 153.667C78.7999 251.134 79.0665 260.201 81.1999 267.001C89.7332 293.401 110.267 313.134 136 319.667C168.267 327.934 205.467 310.867 219.867 281.267C228.533 263.667 228.667 262.334 228.667 195.667C228.8 149.001 229.2 134.601 230.533 130.601C235.067 118.201 245.733 110.601 258.667 110.867C269.867 111.001 279.467 117.001 284.667 127.134C287.067 131.534 287.2 136.734 287.733 195.134L288.133 258.334L291.733 269.267C306.8 314.467 356.533 334.734 398.533 312.601C410.8 306.201 422.533 294.467 428.933 282.334C437.733 265.267 438 263.401 438 198.201C438 163.001 438.667 137.267 439.467 133.667C445.733 106.334 483.333 102.734 495.2 128.334C497.067 132.334 497.467 141.934 498 198.334C498.667 263.134 498.8 263.801 501.867 271.667C516.267 308.201 551.6 327.667 589.067 319.667C614.933 314.201 635.6 295.267 644.266 269.267L647.866 258.334L648.266 198.334C648.4 165.267 648.933 136.601 649.333 134.334C650.533 128.067 656.133 120.734 662.8 116.867C667.866 113.934 670.666 113.134 677.2 113.134C689.6 113.267 698.266 118.467 704.133 129.667C706.533 134.067 706.666 139.667 707.333 219.934L708 305.401L712 311.134C722.133 325.667 741.2 324.201 749.6 308.467L752.666 302.601V218.467C752.666 126.201 752.533 125.534 744.533 108.734C739.866 98.8675 727.466 85.1342 718 79.0008C706.266 71.5342 693.733 67.9342 678.666 67.8008C670.933 67.6675 662.533 68.4675 658.666 69.5342C633.733 76.4675 613.466 96.2008 605.2 121.667C603.067 128.067 602.8 136.467 602.133 192.334C601.333 253.801 601.2 255.801 598.533 261.001C594.8 267.801 592.133 270.201 584.133 273.801C570.267 279.934 554.133 274.067 547.067 260.467L543.333 253.401V193.801C543.333 127.134 542.8 122.734 534.533 105.801C527.867 92.2008 514.933 79.5342 501.2 72.8675C458.8 52.4675 410.667 73.6675 395.867 119.001C393.733 125.534 393.467 133.801 392.8 191.134L392 255.934L388 262.334C376.4 281.001 349.467 280.867 337.733 261.934L334.667 257.001L334 191.667L333.333 126.334L329.733 116.334C318.133 84.4675 290.4 65.0008 257.2 65.2675C224.933 65.5342 196.133 87.5342 185.867 119.667C184.667 123.534 184 142.867 183.467 190.467L182.667 255.934L178.667 262.334C175.733 267.134 172.667 269.934 167.333 272.734C160.933 276.067 158.933 276.467 151.6 275.934C141.6 275.134 134.533 271.001 129.067 262.734L125.333 257.134L124.933 152.067C124.667 67.9342 124.933 47.0008 126.267 47.0008C127.2 46.8675 138.267 46.8675 150.667 47.0008C178.133 47.1341 185.333 45.5341 192.933 37.5341C198.667 31.5341 200.4 25.0008 198.133 17.6675C196.133 11.1341 187.733 3.8008 180 1.8008C173.333 0.200797 26.7999 -0.0658696 19.9999 1.53413Z" fill="black"/>
 <path d="M97.3336 361.533C74.0002 367.267 64.6669 396.733 80.4002 415C87.4669 423.4 94.0002 426.2 106.667 426.2C115.6 426.333 118.534 425.8 123.867 423C133.467 418.067 134.267 415.933 128.667 411.133C124 407.4 124 407.267 120.8 409.8C107.2 420.6 87.3336 411 87.3336 393.667C87.3336 376.2 107.2 366.733 120.934 377.667L124.267 380.2L128.8 375.533L133.334 370.867L129.6 367.667C122.8 361.667 108.134 359 97.3336 361.533Z" fill="black"/>
 <path d="M190 393.666V425.666H197.333H204.667V416.999V408.333H211.333H218L224.267 416.999L230.533 425.666H238.267H246L239.2 415.799L232.267 405.799L236.533 402.199C248.133 392.466 247.467 375.799 235.2 366.733C230.133 362.866 223.067 361.799 205.733 361.666H190V393.666ZM224.533 375.666C230.667 378.733 232 386.866 227.467 392.466C225.333 395.133 223.467 395.666 214.8 396.066L204.667 396.599V385.133V373.666H212.667C217.2 373.666 222.533 374.599 224.533 375.666Z" fill="black"/>
@@ -27,46 +27,43 @@
 <path d="M627.333 393.666V425.666H634.666H642V393.666V361.666H634.666H627.333V393.666Z" fill="black"/>
 <path d="M695.333 362.733C695.333 363.267 701.333 377.533 708.666 394.467L721.866 425H729.466H736.933L750.666 393.667L764.4 362.333L758.4 361.933C755.066 361.667 751.6 361.8 750.8 362.067C750 362.467 745.2 372.333 740.133 384.2C735.066 395.933 730.4 405.667 730 405.667C729.466 405.667 724.933 395.8 719.866 383.667L710.666 361.667H703.066C698.8 361.667 695.333 362.2 695.333 362.733Z" fill="black"/>
 </svg>
-      </span>
-    </div>
-    <!-- Texte centré verticalement -->
-    <div class="flex flex-col items-center justify-center w-full min-h-screen" style="z-index:5;">
-      <div class="text-3xl md:text-5xl font-bold mb-2 flex items-center justify-center" style="height: 1.5em;">
-        <span id="typing-text"></span>
-        <span id="typing-cursor" class="inline-block">|</span>
+        </span>
+      </div>
+      <div class="flex flex-col items-center justify-center w-full min-h-screen" style="z-index:5;">
+        <div class="text-3xl md:text-5xl font-bold mb-2 flex items-center justify-center" style="height: 1.5em;">
+          <span id="typing-text"></span>
+          <span id="typing-cursor" class="inline-block">|</span>
+        </div>
+      </div>
+      <div class="w-full flex justify-center" style="position:absolute;bottom:10vh;left:0;right:0;z-index:10;">
+        <span id="explanation-btn" class="inline-flex items-center justify-center w-12 h-12 rounded-full text-black bg-white hover:bg-black hover:text-white transition-colors duration-300 cursor-pointer pointer-events-auto" title="En savoir plus">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" fill="none"/>
+            <path stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M12 16v-2m0-4h.01" />
+          </svg>
+        </span>
       </div>
     </div>
-    <!-- Bouton explanation en bas à 10% du viewport -->
-    <div class="w-full flex justify-center" style="position:absolute;bottom:10vh;left:0;right:0;z-index:10;">
-      <span id="explanation-btn" class="inline-flex items-center justify-center w-12 h-12 rounded-full text-black bg-white hover:bg-black hover:text-white transition-colors duration-300 cursor-pointer" title="En savoir plus">
-        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" fill="none"/>
-          <path stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M12 16v-2m0-4h.01" />
-        </svg>
-      </span>
+    <!-- Wrapper Description -->
+    <div id="description-wrapper" class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+      <section id="presentation" class="fixed inset-0 z-30 flex flex-col items-center justify-center bg-white/60 backdrop-blur-md px-4 hidden transition-all duration-500 fade-blur" style="height:100vh;">
+        <button id="close-presentation" aria-label="Fermer la description" class="mb-8 w-12 h-12 flex items-center justify-center rounded-full bg-white/80 hover:bg-white shadow transition pointer-events-auto">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <line x1="6" y1="6" x2="18" y2="18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            <line x1="18" y1="6" x2="6" y2="18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </button>
+        <div id="desc-elastic-wrapper" class="flex flex-col items-center justify-center h-full w-full">
+          <div id="presentation-lines" class="space-y-6 text-xl md:text-2xl font-bold leading-relaxed max-w-2xl mx-auto text-center">
+            <div>Tamcreativ est un studio de création visuelle spécialisé dans le branding de caractère, fondé sur une approche à la fois stratégique, artistique et humaine.</div>
+            <div>Nous concevons des identités visuelles durables, pensées pour incarner la singularité des marques.</div>
+            <div>Chaque projet est une collaboration sur mesure, où le design devient un langage - précis, sensible et porteur de sens.</div>
+            <div><strong>Notre mission :</strong> créer des marques qui se distinguent par leur justesse, leur cohérence et leur impact.</div>
+          </div>
+        </div>
+      </section>
     </div>
-  </section>
-
-  <!-- Section Présentation -->
-  <section id="presentation" class="fixed inset-0 z-30 flex flex-col items-center justify-center bg-white/60 backdrop-blur-md px-4 hidden transition-all duration-500">
-    <button id="close-presentation" aria-label="Fermer la description" class="mb-8 w-12 h-12 flex items-center justify-center rounded-full bg-white/80 hover:bg-white shadow transition">
-      <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-        <line x1="6" y1="6" x2="18" y2="18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-        <line x1="18" y1="6" x2="6" y2="18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-      </svg>
-    </button>
-    <div id="presentation-lines" class=" cursor-pointer space-y-6 text-xl md:text-2xl font-medium leading-relaxed max-w-2xl mx-auto text-center">
-      <div>Tamcreativ est un studio de création visuelle spécialisé dans le branding de caractère, fondé sur une approche à la fois stratégique, artistique et humaine.</div>
-      <div>Nous concevons des identités visuelles durables, pensées pour incarner la singularité des marques.</div>
-      <div>Chaque projet est une collaboration sur mesure, où le design devient un langage - précis, sensible et porteur de sens.</div>
-      <div>
-        <strong><a class="" href="mailto:studio@tamcreativ.com">studio@tamcreativ.com</a></strong> <br>
-        <strong><a class="underline" href="https://bento.me/tamsir">portfolio</a></strong>
-      </div>
-
-    </div>
-  </section>
-
+  </main>
 
   <script src="main.js"></script>
 </body>

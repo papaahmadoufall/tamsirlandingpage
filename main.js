@@ -38,32 +38,73 @@ setInterval(() => {
 window.addEventListener('DOMContentLoaded', () => {
   gsap.registerPlugin(ScrollTrigger);
 
-  // Scroll synchronisé sur la description
+  // Animation synchronisée scroll (GSAP + ScrollTrigger)
   const isMobile = window.innerWidth < 768;
-  const lines = document.querySelectorAll('#presentation-lines > div');
-  if (lines.length) {
-    lines.forEach((line, i) => {
-      gsap.fromTo(line,
-        { y: isMobile ? 120 : 60, opacity: 0 },
-        {
-          y: 0,
-          opacity: 1,
-          scrollTrigger: {
-            trigger: '#presentation-lines',
-            start: 'top center',
-            end: 'bottom center',
-            scrub: isMobile ? 1.5 : 0.7,
-            onLeave: () => {
-              // Effet bounce à la fin du scroll
-              gsap.to(line, { y: -20, duration: 0.25, ease: 'bounce.out', yoyo: true, repeat: 1 });
-            }
-          },
-          ease: 'power1.out',
-          duration: 1.2
+  const scrubValue = isMobile ? 2 : 1;
+  const yOut = isMobile ? -120 : -60;
+  const scaleOut = isMobile ? 0.7 : 0.85;
+
+  // Tamcreativ elements
+  const logo = document.querySelector('#tamcreativ-wrapper .logo-intro');
+  const typing = document.querySelector('#tamcreativ-wrapper .text-3xl');
+  const btn = document.getElementById('explanation-btn');
+  // Description wrapper
+  const descSection = document.getElementById('presentation');
+  const descLines = document.querySelectorAll('#presentation-lines > div');
+
+  // Reset states
+  gsap.set([logo, typing, btn], {opacity: 1, y: 0, scale: 1});
+  gsap.set(descSection, {opacity: 0, pointerEvents: 'none'});
+  gsap.set(descLines, {opacity: 0, y: 40});
+
+  // ScrollTrigger timeline
+  const tl = gsap.timeline({
+    scrollTrigger: {
+      trigger: '#main-scroll',
+      start: 'top top',
+      end: '+=100%',
+      scrub: scrubValue,
+      pin: true,
+      anticipatePin: 1,
+      onUpdate: self => {
+        // Optionnel : pointer-events pour la description
+        if (self.progress > 0.98) {
+          descSection.style.pointerEvents = 'auto';
+        } else {
+          descSection.style.pointerEvents = 'none';
         }
-      );
-    });
-  }
+      },
+      onLeave: () => {
+        // Effet bounce à la fin
+        gsap.to(descSection, {y: -30, duration: 0.18, ease: 'power2.in'});
+        gsap.to(descSection, {y: 0, duration: 0.5, ease: 'bounce.out', delay: 0.18});
+      }
+    }
+  });
+
+  // Tamcreativ out
+  tl.to([logo, typing, btn], {
+    opacity: 0,
+    y: yOut,
+    scale: scaleOut,
+    stagger: 0.05,
+    duration: 0.6,
+    ease: 'power1.inOut'
+  }, 0);
+
+  // Description in
+  tl.to(descSection, {
+    opacity: 1,
+    duration: 0.3,
+    ease: 'power1.inOut'
+  }, 0.2);
+  tl.to(descLines, {
+    opacity: 1,
+    y: 0,
+    stagger: 0.18,
+    duration: 0.7,
+    ease: 'power2.out'
+  }, 0.3);
 
   const presentationSection = document.getElementById('presentation');
   const explanationBtn = document.getElementById('explanation-btn');
@@ -176,6 +217,45 @@ window.addEventListener('DOMContentLoaded', () => {
       showPresentation();
     });
   }
+
+  // Effet élastique sur overscroll haut (fin du scroll)
+  let elasticActive = false;
+  let elasticTimeout = null;
+  const scrollTrigger = tl.scrollTrigger;
+  const elasticWrapper = document.getElementById('desc-elastic-wrapper');
+
+  function triggerElastic(stretch = 1.3, duration = 0.12) {
+    if (elasticActive) return;
+    elasticActive = true;
+    gsap.to(elasticWrapper, {scaleY: stretch, y: -30, duration, transformOrigin: '50% 0%', ease: 'power1.out'});
+    if (elasticTimeout) clearTimeout(elasticTimeout);
+    elasticTimeout = setTimeout(() => {
+      gsap.to(elasticWrapper, {scaleY: 1, y: 0, duration: 0.9, ease: 'elastic.out(1,0.4)', clearProps: 'scaleY,y'});
+      elasticActive = false;
+    }, 180);
+  }
+
+  // Wheel (desktop)
+  window.addEventListener('wheel', (e) => {
+    if (scrollTrigger && scrollTrigger.progress >= 1 && e.deltaY < 0) {
+      triggerElastic();
+    }
+  }, {passive: true});
+
+  // Touch (mobile)
+  let lastTouchY = null;
+  document.addEventListener('touchstart', (e) => {
+    if (e.touches.length === 1) lastTouchY = e.touches[0].clientY;
+  });
+  document.addEventListener('touchmove', (e) => {
+    if (lastTouchY !== null && scrollTrigger && scrollTrigger.progress >= 1) {
+      const currentY = e.touches[0].clientY;
+      if (lastTouchY - currentY > 10) { // swipe up
+        triggerElastic(1.15, 0.13);
+      }
+    }
+  }, {passive: true});
+  document.addEventListener('touchend', () => { lastTouchY = null; });
 });
 
 // Curseur custom sur le bouton (inutile ici, mais conservé si besoin d'autres interactions)
