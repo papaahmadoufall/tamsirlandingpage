@@ -1,5 +1,5 @@
-// Effet typing infini sur deux mots
-const typingTexts = ['tamcreativ', 'coming soon...'];
+// Effet typing infini sur quatre mots
+const typingTexts = ['tamcreativ', '3D artist', 'Motion designer', 'Graphic designer'];
 const typingEl = document.getElementById('typing-text');
 const cursorEl = document.getElementById('typing-cursor');
 let typingWordIndex = 0;
